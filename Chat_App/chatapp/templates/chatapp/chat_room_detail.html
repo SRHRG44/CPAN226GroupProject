@@ -19,7 +19,8 @@
     </style>
 </head>
 <body>
-    <h1>{{ chat_room.name }}</h1>
+    <h1>Welcome, {{ user.username }}!</h1>
+    <h2>{{ chat_room.name }}</h2>
 
     <p><a href="{% url 'chat_room_list' %}">← Back to Chat Rooms</a></p> {# Add this line #}
 
