@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ chat_room.name }}</title>
+    <style>
+        .message {
+            padding: 5px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .delivered {
+            font-size: 0.8em;
+            color: gray;
+        }
+        .read {
+            font-size: 0.8em;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ chat_room.name }}</h1>
+
+    <p><a href="{% url 'chat_room_list' %}">← Back to Chat Rooms</a></p> {# Add this line #}
+
+    <div id="messages">
+        {% for message in messages %}
+            <div class="message" id="message-{{ message.id }}">
+                <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+                <br>
+                <small class="delivered">
+                    {% if message.is_delivered %}Delivered &#10003;{% else %}Pending...{% endif %}
+                </small>
+                <small class="read">
+                    {% if message.is_read %}Read &#10003;&#10003;{% endif %}
+                </small>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form id="message-form">
+        {% csrf_token %}
+        <input type="text" id="message-content" placeholder="Type your message...">
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        document.getElementById('message-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const content = document.getElementById('message-content').value;
+            fetch('{% url "send_message" chat_room.name %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: `content=${encodeURIComponent(content)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('message-content').value = '';
+                    location.reload(); // Simple refresh for demonstration
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(messageDiv => {
+                const messageId = messageDiv.id.split('-')[1];
+                if (!messageDiv.querySelector('.read').innerText.includes('&#10003;&#10003;')) {
+                    fetch(`/chat/message/${messageId}/read/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            const readSpan = messageDiv.querySelector('.read');
+                            if (readSpan) {
+                                readSpan.innerHTML = 'Read &#10003;&#10003;';
+                                console.log(`Message ${messageId} marked as read.`);
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error marking message read:', error));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

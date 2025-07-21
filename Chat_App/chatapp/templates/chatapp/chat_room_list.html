@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Rooms</title>
+</head>
+<body>
+    <h1>Your Chat Rooms</h1>
+
+    {# Form to create/join a new chat room #}
+    <h2>Create or Join a Chat Room</h2>
+    <form action="{% url 'create_or_join_room' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="room_name" placeholder="Enter room name" required>
+        <button type="submit">Create or Go to Room</button>
+    </form>
+
+    <hr> {# Separator #}
+
+    <h2>Existing Chat Rooms</h2>
+    {% if chat_rooms %}
+        <ul>
+            {% for room in chat_rooms %}
+                <li><a href="{% url 'chat_room_detail' room.name %}">{{ room.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You are not currently part of any chat rooms. Create one above!</p>
+    {% endif %}
+
+    <p>
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </p>
+</body>
+</html>

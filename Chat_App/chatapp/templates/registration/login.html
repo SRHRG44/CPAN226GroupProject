@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }} {# This renders all form fields as paragraphs #}
+        <button type="submit">Login</button>
+    </form>
+    {# Optional: Link to register/password reset if you implement them later #}
+    {# <p>Don't have an account? <a href="{% url 'register' %}">Register here</a>.</p> #}
+    {# <p><a href="{% url 'password_reset' %}">Forgot password?</a></p> #}
+</body>
+</html>
