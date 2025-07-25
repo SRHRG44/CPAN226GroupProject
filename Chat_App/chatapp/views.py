@@ -50,14 +50,29 @@ def send_message(request, room_name):
     return JsonResponse({'status': 'fail'}, status=400)
 
 @login_required
+#@csrf_exempt
 def mark_message_read(request, message_id):
     if request.method == 'POST':
-        message = get_object_or_404(Message, id=message_id)
-        # Ensure only intended recipient can mark as read (more complex logic for 1-to-1 chats)
-        # For group chats, anyone seeing it could potentially mark it as read.
-        # For a basic demo, we'll just mark it read.
-        if not message.is_read:
-            message.is_read = True
-            message.save()
-            return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'fail'}, status=400)
+        try:
+            message = get_object_or_404(Message, id=message_id)
+            # Ensure the user has permission to mark this message as read.
+            # For a group chat, anyone viewing might "mark" it.
+            # For 1-to-1, you'd check if request.user is the recipient.
+            # For simplicity for now, we'll just mark it if it exists.
+
+            if not message.is_read:
+                message.is_read = True
+                message.save()
+                # Instead of returning success directly, ensure Django's CSRF
+                # middleware has completed its check first.
+                return JsonResponse({'status': 'success'})
+            else:
+                # Message was already read, still return success
+                return JsonResponse({'status': 'success', 'message': 'Already read'})
+        except Exception as e:
+            # Log the specific exception for debugging
+            print(f"Error in mark_message_read: {e}")
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500) # Use 500 for server error
+
+    # If it's not a POST request, return a 405 Method Not Allowed, not 400 Bad Request
+    return JsonResponse({'status': 'fail', 'message': 'Method not allowed'}, status=405)

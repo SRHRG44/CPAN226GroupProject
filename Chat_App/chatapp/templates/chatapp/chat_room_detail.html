@@ -23,7 +23,7 @@
     <h1>Welcome, {{ user.username }}!</h1>
     <h2>This is Chat room: {{ chat_room.name }}</h2>
 
-    <p><a href="{% url 'chat_room_list' %}">← Back to Chat Rooms</a></p> {# Add this line #}
+    <p><a href="{% url 'chat_room_list' %}">← Back to Chat Rooms</a></p>
 
     <div id="messages">
         {% for message in messages %}
@@ -62,7 +62,7 @@
             .then(data => {
                 if (data.status === 'success') {
                     document.getElementById('message-content').value = '';
-                    location.reload(); // Simple refresh for demonstration
+                    location.reload();
                 }
             });
         });
@@ -75,12 +75,20 @@
                     fetch(`/chat/message/${messageId}/read/`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
+                            'Content-Type': 'application/x-www-form-urlencoded',
                             'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                         },
-                        body: JSON.stringify({})
+                        body: ''
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.text().then(text => {
+                                console.error('Django Error Response:', text);
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            });
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.status === 'success') {
                             const readSpan = messageDiv.querySelector('.read');
