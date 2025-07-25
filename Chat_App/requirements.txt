@@ -1,0 +1,10 @@
+Django~=5.0
+channels~=4.0
+daphne~=4.0
+
+# instructions in case you pull and cannot activate the virtual environment
+# Terminal commands to delete and reinstall the virtual environment
+# 1. Remove-Item -Recurse -Force venv (Delete the existing virtual environment folder (venv) if it exists. if it doesnt skip this step and create it)
+# 2. Create a virtual environment: python -m venv venv
+# 3. Activate the virtual environment: venv\Scripts\activate
+# 4. Install the requirements: pip install -r requirements.txt
