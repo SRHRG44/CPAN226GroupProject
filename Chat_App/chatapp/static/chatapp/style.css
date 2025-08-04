@@ -1,0 +1,121 @@
+body {
+    background-color: #fffaf0;
+    font-family: 'Poppins', sans-serif;
+    color: #3e3e3e;
+    margin: 2rem;
+}
+
+h1, h2, h3 {
+    color: #6b4c3b;
+    margin-bottom: 0.5rem;
+}
+
+a {
+    color: #8b5e3c;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #fef6e4;
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    max-height: 450px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.message {
+    max-width: 60%;
+    padding: 12px 16px;
+    border-radius: 20px;
+    position: relative;
+    word-wrap: break-word;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
+    font-size: 0.95rem;
+}
+
+.message:nth-child(even) {
+    background-color: #d0f4bf;
+    align-self: flex-start;
+}
+
+.message:nth-child(even)::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right-color: #abea8c;
+    border-left: 0;
+    border-bottom: 0;
+    margin-top: -5px;
+}
+
+.message:nth-child(odd) {
+    background-color: #ede06d;
+    align-self: flex-end;
+}
+
+.message:nth-child(odd)::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: -10px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-left-color: #ffd6e7;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: -5px;
+}
+.message:hover {
+    background-color: #eaa259;
+}
+
+.delivered, .read {
+    font-size: 0.75rem;
+    color: #9c9c9c;
+    display: block;
+    margin-top: 4px;
+}
+
+form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #fff;
+}
+
+button {
+    background-color: #f4b6b6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #ef9a9a;
+}

@@ -2,21 +2,9 @@
 <html>
 <head>
     <title>{{ chat_room.name }}</title>
-    <style>
-        .message {
-            padding: 5px;
-            margin-bottom: 5px;
-            border-bottom: 1px solid #eee;
-        }
-        .delivered {
-            font-size: 0.8em;
-            color: gray;
-        }
-        .read {
-            font-size: 0.8em;
-            color: green;
-        }
-    </style>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <h3>🗨️ ChatApp</h3>
