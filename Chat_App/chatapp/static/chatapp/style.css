@@ -17,7 +17,7 @@ h2, h3 {
 }
 
 a {
-    color: #8b5e3c;
+    color: #396b62;
     text-decoration: none;
 }
 
@@ -100,4 +100,10 @@ button {
 
 button:hover {
     background-color: #eaa259;
+}
+
+.header {
+    display:flex;
+    align-self: flex-start;
+    margin-bottom: 1rem;
 }

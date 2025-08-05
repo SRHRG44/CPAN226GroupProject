@@ -8,6 +8,14 @@
 </head>
 <body>
     <h3>ChatApp</h3>
+    <div class="header">
+        <p>
+        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+        </p>
+    </div>
     <h1>Welcome, {{ user.username }}!</h1>
 
     <hr> {# Separator #}
@@ -32,12 +40,5 @@
     {% else %}
         <p>You are not currently part of any chat rooms. Create one above!</p>
     {% endif %}
-
-    <p>
-        <form action="{% url 'logout' %}" method="post" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    </p>
 </body>
 </html>
