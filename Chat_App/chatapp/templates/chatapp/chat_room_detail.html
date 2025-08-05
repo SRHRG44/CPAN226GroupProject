@@ -18,7 +18,10 @@
 
     <div id="messages">
       {% for message in messages %}
-      <div class="message" id="message-{{ message.id }}">
+      <div
+        class="message {% if message.sender == request.user %}outgoing{% else %}incoming{% endif %}"
+        id="message-{{ message.id }}"
+      >
         <strong>{{ message.sender.username }}:</strong> {{ message.content }}
         <br />
         <small class="delivered">
@@ -64,63 +67,48 @@
                 location.reload();
               }
             });
-        });
 
-      document.addEventListener("DOMContentLoaded", function () {
-        const messages = document.querySelectorAll(".message");
-        messages.forEach((messageDiv) => {
-          const senderUsername = messageDiv
-            .querySelector("strong")
-            .innerText.replace(":", "")
-            .trim();
-          if (senderUsername === "{{ user.username }}") {
-            messageDiv.classList.add("outgoing");
-          } else {
-            messageDiv.classList.add("incoming");
-          }
-        });
-
-        messages.forEach((messageDiv) => {
-          const messageId = messageDiv.id.split("-")[1];
-          if (
-            !messageDiv
-              .querySelector(".read")
-              .innerText.includes("&#10003;&#10003;")
-          ) {
-            fetch(`/chat/message/${messageId}/read/`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-CSRFToken": document.querySelector(
-                  "[name=csrfmiddlewaretoken]"
-                ).value,
-              },
-              body: "",
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  return response.text().then((text) => {
-                    console.error("Django Error Response:", text);
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                  });
-                }
-                return response.json();
+          messages.forEach((messageDiv) => {
+            const messageId = messageDiv.id.split("-")[1];
+            if (
+              !messageDiv
+                .querySelector(".read")
+                .innerText.includes("&#10003;&#10003;")
+            ) {
+              fetch(`/chat/message/${messageId}/read/`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "X-CSRFToken": document.querySelector(
+                    "[name=csrfmiddlewaretoken]"
+                  ).value,
+                },
+                body: "",
               })
-              .then((data) => {
-                if (data.status === "success") {
-                  const readSpan = messageDiv.querySelector(".read");
-                  if (readSpan) {
-                    readSpan.innerHTML = "Read &#10003;&#10003;";
-                    console.log(`Message ${messageId} marked as read.`);
+                .then((response) => {
+                  if (!response.ok) {
+                    return response.text().then((text) => {
+                      console.error("Django Error Response:", text);
+                      throw new Error(`HTTP error! status: ${response.status}`);
+                    });
                   }
-                }
-              })
-              .catch((error) =>
-                console.error("Error marking message read:", error)
-              );
-          }
+                  return response.json();
+                })
+                .then((data) => {
+                  if (data.status === "success") {
+                    const readSpan = messageDiv.querySelector(".read");
+                    if (readSpan) {
+                      readSpan.innerHTML = "Read &#10003;&#10003;";
+                      console.log(`Message ${messageId} marked as read.`);
+                    }
+                  }
+                })
+                .catch((error) =>
+                  console.error("Error marking message read:", error)
+                );
+            }
+          });
         });
-      });
     </script>
   </body>
 </html>
