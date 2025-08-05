@@ -42,45 +42,26 @@ a:hover {
     font-size: 0.95rem;
 }
 
-.message:nth-child(even) {
-    background-color: #d0f4bf;
-    align-self: flex-start;
-}
-
-.message:nth-child(even)::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: -10px;
-    width: 0;
-    height: 0;
-    border: 10px solid transparent;
-    border-right-color: #abea8c;
-    border-left: 0;
-    border-bottom: 0;
-    margin-top: -5px;
-}
-
-.message:nth-child(odd) {
-    background-color: #ede06d;
-    align-self: flex-end;
-}
-
-.message:nth-child(odd)::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: -10px;
-    width: 0;
-    height: 0;
-    border: 10px solid transparent;
-    border-left-color: #ffd6e7;
-    border-right: 0;
-    border-bottom: 0;
-    margin-top: -5px;
-}
 .message:hover {
     background-color: #eaa259;
+}
+
+.message.incoming {
+    background-color: rgb(135, 235, 105);
+    text-align: left;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 5px;
+    color: black;
+}
+
+message.outgoing {
+    background-color: rgb(236, 181, 40);
+    text-align: right;
+    border-radius:15px;
+    padding: 10px;
+    margin: 5px;
+    color: black;
 }
 
 .delivered, .read {
@@ -96,7 +77,7 @@ form {
     align-items: center;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
     flex-grow: 1;
     padding: 10px;
     border: 1px solid #ccc;
@@ -106,7 +87,7 @@ input[type="text"] {
 }
 
 button {
-    background-color: #f4b6b6;
+    background-color: #eb9b39;
     color: white;
     border: none;
     border-radius: 10px;
@@ -117,5 +98,5 @@ button {
 }
 
 button:hover {
-    background-color: #ef9a9a;
+    background-color: #eaa259;
 }
