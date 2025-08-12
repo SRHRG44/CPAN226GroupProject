@@ -3,6 +3,7 @@ body {
     font-family: 'Poppins', sans-serif;
     color: #3e3e3e;
     margin: 2rem;
+    line-height: 1.6;
 }
 
 h1 {
@@ -23,6 +24,36 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #daa2a2;
+}
+
+.room-section {
+    margin: 2rem 0;
+}
+
+.room-list {
+    list-style: none;
+    padding: 0;
+}
+
+.room-list li {
+    background-color: #f7ccb5;
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+
+.room-list li:hover {
+    background-color: #f5c5c5;
 }
 
 #messages {
@@ -46,23 +77,24 @@ a:hover {
     word-wrap: break-word;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
     font-size: 0.95rem;
+    margin: 4px 0;
 }
 
 .message:hover {
-    background-color: #f5c5c5;
+    opacity: 0.9;
 }
 
 .incoming {
-  background-color: #d7eafc;
-  text-align: right;
-  margin-left: auto;
+    background-color: #d7eafc;
+    align-self: flex-start;
+    margin-right: auto;
 }
 
 .outgoing {
-  background-color: #daa2a2; 
-  text-align: left;
-  align-items: self-end;
-  margin-right: auto;
+    background-color: #daa2a2;
+    align-self: flex-end;
+    margin-left: auto;
+    text-align: right;
 }
 
 .delivered, .read {
@@ -76,6 +108,7 @@ form {
     display: flex;
     gap: 0.5rem;
     align-items: center;
+    margin: 1rem 0;
 }
 
 input[type="text"], input[type="password"] {
@@ -85,6 +118,12 @@ input[type="text"], input[type="password"] {
     border-radius: 10px;
     font-size: 1rem;
     background-color: #fff;
+    outline: none;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #daa2a2;
+    box-shadow: 0 0 5px rgba(218, 162, 162, 0.3);
 }
 
 button {
@@ -96,14 +135,16 @@ button {
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s;
+    font-size: 1rem;
 }
 
 button:hover {
     background-color: #eaa259;
 }
 
-.header {
-    display:flex;
-    align-self: flex-start;
-    margin-bottom: 1rem;
+hr {
+    border: none;
+    height: 2px;
+    background-color: #daa2a2;
+    margin: 2rem 0;
 }

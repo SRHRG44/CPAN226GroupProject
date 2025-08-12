@@ -1,0 +1,109 @@
+body {
+    background-color: #faead8;
+    font-family: 'Poppins', sans-serif;
+    color: #3e3e3e;
+    margin: 2rem;
+}
+
+h1 {
+    color: #6b4c3b;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+h2, h3 {
+    color: #6b4c3b;
+    margin-bottom: 0.5rem;
+}
+
+a {
+    color: #396b62;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #f7ccb5;
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    max-height: 450px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.message {
+    max-width: 60%;
+    padding: 12px 16px;
+    border-radius: 20px;
+    position: relative;
+    word-wrap: break-word;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
+    font-size: 0.95rem;
+}
+
+.message:hover {
+    background-color: #f5c5c5;
+}
+
+.incoming {
+  background-color: #d7eafc;
+  text-align: right;
+  margin-left: auto;
+}
+
+.outgoing {
+  background-color: #daa2a2; 
+  text-align: left;
+  align-items: self-end;
+  margin-right: auto;
+}
+
+.delivered, .read {
+    font-size: 0.75rem;
+    color: #977777;
+    display: block;
+    margin-top: 4px;
+}
+
+form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+input[type="text"], input[type="password"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #fff;
+}
+
+button {
+    background-color: #daa2a2;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #eaa259;
+}
+
+.header {
+    display:flex;
+    align-self: flex-start;
+    margin-bottom: 1rem;
+}

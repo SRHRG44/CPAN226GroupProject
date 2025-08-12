@@ -1,21 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
-    {% load static %}
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'chatapp/style.css' %}">
+<title>Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        background-color: #faead8;
+        font-family: 'Poppins', sans-serif;
+        color: #3e3e3e;
+        margin: 2rem;
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    .login-container {
+        background-color: #f7ccb5;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    h1, h3 {
+        color: #6b4c3b;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    form p {
+        margin-bottom: 1rem;
+        text-align: left;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #6b4c3b;
+    }
+
+    input[type="text"], input[type="password"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 1rem;
+        background-color: #fff;
+        outline: none;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+        border-color: #daa2a2;
+        box-shadow: 0 0 5px rgba(218, 162, 162, 0.3);
+    }
+
+    button {
+        background-color: #daa2a2;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 16px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    button:hover {
+        background-color: #eaa259;
+    }
+
+</style>
 </head>
 <body>
-    <h3>ChatApp</h3>
-    <h1>Login</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }} {# This renders all form fields as paragraphs #}
-        <button type="submit">Login</button>
-    </form>
-    {# Optional: Link to register/password reset if you implement them later #}
-    {# <p>Don't have an account? <a href="{% url 'register' %}">Register here</a>.</p> #}
-    {# <p><a href="{% url 'password_reset' %}">Forgot password?</a></p> #}
+    <div class="login-container">
+        <h3>ChatApp</h3>
+        <h1>Login</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+            </form>
+    </div>
 </body>
 </html>

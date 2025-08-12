@@ -3,6 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import ChatRoom, Message
 from django.db.models import Q
+from django.conf import settings
+from django.contrib.staticfiles import finders
+
+
+def debug_static(request):
+    result = finders.find('chatapp/style.css')
+    return HttpResponse(f"Static file found at: {result}<br>STATICFILES_DIRS: {settings.STATICFILES_DIRS}")
 
 @login_required
 def chat_room_list(request):

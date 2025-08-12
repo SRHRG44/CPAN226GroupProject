@@ -2,43 +2,147 @@
 <html>
 <head>
     <title>Chat Rooms</title>
-    {% load static %}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'chatapp/style.css' %}">
+    <style>
+        body {
+            background-color: #faead8;
+            font-family: 'Poppins', sans-serif;
+            color: #3e3e3e;
+            margin: 2rem;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #6b4c3b;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        h2, h3 {
+            color: #6b4c3b;
+            margin-bottom: 0.5rem;
+        }
+
+        a {
+            color: #396b62;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #daa2a2;
+        }
+
+        .room-section {
+            margin: 2rem 0;
+        }
+
+        .room-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .room-list li {
+            background-color: #f7ccb5;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .room-list li:hover {
+            background-color: #f5c5c5;
+        }
+
+        form {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        input[type="text"], input[type="password"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: #fff;
+            outline: none;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #daa2a2;
+            box-shadow: 0 0 5px rgba(218, 162, 162, 0.3);
+        }
+
+        button {
+            background-color: #daa2a2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #eaa259;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #daa2a2;
+            margin: 2rem 0;
+        }
+    </style>
 </head>
 <body>
-    <h3>ChatApp</h3>
     <div class="header">
-        <p>
+        <h3>ChatApp</h3>
         <form action="{% url 'logout' %}" method="post" style="display: inline;">
             {% csrf_token %}
             <button type="submit">Logout</button>
         </form>
-        </p>
     </div>
+
     <h1>Welcome, {{ user.username }}!</h1>
 
-    <hr> {# Separator #}
+    <hr>
 
-    {# Form to create/join a new chat room #}
-    <h2>Create or Join a Chat Room</h2>
-    <form action="{% url 'create_or_join_room' %}" method="post">
-        {% csrf_token %}
-        <input type="text" name="room_name" placeholder="Enter room name" required>
-        <button type="submit">Create or Go to Room</button>
-    </form>
+    <div class="room-section">
+        <h2>Create or Join a Chat Room</h2>
+        <form action="{% url 'create_or_join_room' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="room_name" placeholder="Enter room name" required>
+            <button type="submit">Create or Go to Room</button>
+        </form>
+    </div>
 
-    <hr> {# Separator #}
+    <hr>
 
-    <h2>Existing Chat Rooms</h2>
-    {% if chat_rooms %}
-        <ul>
-            {% for room in chat_rooms %}
-                <li><a href="{% url 'chat_room_detail' room.name %}">{{ room.name }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>You are not currently part of any chat rooms. Create one above!</p>
-    {% endif %}
+    <div class="room-section">
+        <h2>Existing Chat Rooms</h2>
+        {% if chat_rooms %}
+            <ul class="room-list">
+                {% for room in chat_rooms %}
+                    <li><a href="{% url 'chat_room_detail' room.name %}">{{ room.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You are not currently part of any chat rooms. Create one above!</p>
+        {% endif %}
+    </div>
 </body>
 </html>

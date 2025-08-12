@@ -1,114 +1,193 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>{{ chat_room.name }}</title>
-    {% load static %}
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'chatapp/style.css' %}" />
-  </head>
-  <body>
-    <h3>ChatApp</h3>
-    <h1>Welcome, {{ user.username }}!</h1>
-    <h2>This is Chat room: {{ chat_room.name }}</h2>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #faead8;
+            font-family: 'Poppins', sans-serif;
+            color: #3e3e3e;
+            margin: 2rem;
+            line-height: 1.6;
+        }
 
-    <p><a href="{% url 'chat_room_list' %}">← Back to Chat Rooms</a></p>
+        h1 {
+            color: #6b4c3b;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        h2, h3 {
+            color: #6b4c3b;
+            margin-bottom: 0.5rem;
+        }
+
+        a {
+            color: #396b62;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #daa2a2;
+        }
+
+        #messages {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: #f7ccb5;
+            padding: 1rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            max-height: 450px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            max-width: 60%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
+            font-size: 0.95rem;
+            margin: 4px 0;
+        }
+
+        .message:hover {
+            opacity: 0.9;
+        }
+
+        .incoming {
+            background-color: #d7eafc;
+            align-self: flex-start;
+            margin-right: auto;
+        }
+
+        .outgoing {
+            background-color: #daa2a2;
+            align-self: flex-end;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        form {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: #fff;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #daa2a2;
+            box-shadow: 0 0 5px rgba(218, 162, 162, 0.3);
+        }
+
+        button {
+            background-color: #daa2a2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #eaa259;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h3>ChatApp</h3>
+        <p><a href="{% url 'chat_room_list' %}">← Back to Chat Rooms</a></p>
+    </div>
+
+    <h1>Welcome, {{ user.username }}!</h1>
+    <h2>Chat Room: {{ chat_room.name }}</h2>
 
     <div id="messages">
-      {% for message in messages %}
-      <div
-        class="message {% if message.sender == request.user %}outgoing{% else %}incoming{% endif %}"
-        id="message-{{ message.id }}"
-      >
-        <strong>{{ message.sender.username }}:</strong> {{ message.content }}
-        <br />
-        <small class="delivered">
-          {% if message.is_delivered %}Delivered &#10003;{% else %}Pending...{% endif %}
-        </small>
-        <small class="read">
-          {% if message.is_read %}Read &#10003;&#10003;{% endif %}
-        </small>
-      </div>
-      {% endfor %}
+        {% for message in messages %}
+            <div class="message {% if message.sender == user %}outgoing{% else %}incoming{% endif %}">
+                <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+            </div>
+        {% endfor %}
     </div>
 
     <form id="message-form">
-      {% csrf_token %}
-      <input
-        type="text"
-        id="message-content"
-        placeholder="Type your message..."
-      />
-      <button type="submit">Send</button>
+        {% csrf_token %}
+        <input type="text" id="message-content" placeholder="Type your message..." required>
+        <button type="submit">Send</button>
     </form>
 
-    <script>
-      document
-        .getElementById("message-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const content = document.getElementById("message-content").value;
-          fetch('{% url "send_message" chat_room.name %}', {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              "X-CSRFToken": document.querySelector(
-                "[name=csrfmiddlewaretoken]"
-              ).value,
-            },
-            body: `content=${encodeURIComponent(content)}`,
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.status === "success") {
-                document.getElementById("message-content").value = "";
-                location.reload();
-              }
-            });
+    {{ chat_room.name|json_script:"room-name" }}
 
-          messages.forEach((messageDiv) => {
-            const messageId = messageDiv.id.split("-")[1];
-            if (
-              !messageDiv
-                .querySelector(".read")
-                .innerText.includes("&#10003;&#10003;")
-            ) {
-              fetch(`/chat/message/${messageId}/read/`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                  "X-CSRFToken": document.querySelector(
-                    "[name=csrfmiddlewaretoken]"
-                  ).value,
-                },
-                body: "",
-              })
-                .then((response) => {
-                  if (!response.ok) {
-                    return response.text().then((text) => {
-                      console.error("Django Error Response:", text);
-                      throw new Error(`HTTP error! status: ${response.status}`);
-                    });
-                  }
-                  return response.json();
-                })
-                .then((data) => {
-                  if (data.status === "success") {
-                    const readSpan = messageDiv.querySelector(".read");
-                    if (readSpan) {
-                      readSpan.innerHTML = "Read &#10003;&#10003;";
-                      console.log(`Message ${messageId} marked as read.`);
-                    }
-                  }
-                })
-                .catch((error) =>
-                  console.error("Error marking message read:", error)
-                );
+    <script>
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const messagesDiv = document.querySelector('#messages');
+            messagesDiv.innerHTML += `
+                <div class="message incoming">
+                    <strong>${data.username || 'User'}:</strong> ${data.message}
+                </div>
+            `;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#message-form').onsubmit = function(e) {
+            e.preventDefault();
+            const messageInputDom = document.querySelector('#message-content');
+            const message = messageInputDom.value.trim();
+
+            if (message) {
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+
+                const messagesDiv = document.querySelector('#messages');
+                messagesDiv.innerHTML += `
+                    <div class="message outgoing">
+                        <strong>You:</strong> ${message}
+                    </div>
+                `;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                messageInputDom.value = '';
             }
-          });
-        });
+        };
     </script>
-  </body>
+</body>
 </html>
